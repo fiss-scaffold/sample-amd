@@ -1,3 +1,15 @@
+//发布路径设置
+fis.set('release', {
+    /*'dir': 'output',*/
+    'watch': true,
+    'live': true,
+    'lint': true,
+    'clean': true,
+    //每次release的时候是否把release目录清空，
+    //注意，如果启动watch/live时，需要把clean设置为true，因为默认只是增量release，而每次清空目录，每次只会重新构建变动的文件
+    'clear': true
+});
+
 var pageFiles = ['index.html', 'page1.html'];
 var boot_config = {
     'src/index.html': 'boot_index',
@@ -9,6 +21,8 @@ fis.match('src/(css/*.less)', {
     parser: fis.plugin('less'),
     rExt: '.css',
 });*/
+
+
 
 fis.match('src/css/*.scss', {
     parser: fis.plugin('node-sass'),
