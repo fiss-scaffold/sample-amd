@@ -1,14 +1,18 @@
 //发布路径设置
 fis.set('release', {
-    /*'dir': 'output',*/
-    'watch': true,
-    'live': true,
-    'lint': true,
+    'dir': 'output',
+    /*'watch': true,
+    'live': true,*/
+    /*'lint': true,*/
     'clean': true,
     //每次release的时候是否把release目录清空，
     //注意，如果启动watch/live时，需要把clean设置为true，因为默认只是增量release，而每次清空目录，每次只会重新构建变动的文件
     'clear': true
 });
+
+fis.set('project.files', [
+    'src/**',
+]);
 
 var pageFiles = ['index.html', 'page1.html'];
 var boot_config = {
@@ -16,32 +20,117 @@ var boot_config = {
     'src/page1.html': 'boot_page1'
 };
 
-/*// less 编译为 css
-fis.match('src/(css/*.less)', {
-    parser: fis.plugin('less'),
-    rExt: '.css',
-});*/
 
-
-
-fis.match('src/css/*.scss', {
-    parser: fis.plugin('node-sass'),
-    rExt: '.css',
+//package 设置
+fis.match('::package', {
+    spriter: fis.plugin('csssprites-plus', {
+        margin: 10,
+        layout: 'matrix',
+        to: '/img'
+    })
 });
+
+
+/**
+ * 开发阶段(dev)打包配置
+ * 不对css/js/img进行合并，一切都是按需加载
+ * scss之类的文件会编译成最终产物css等
+ * inline内嵌的资源会被自动合并进宿主文件
+ * 为了防止缓存，所有资源打包时添加hash值（只用于开发阶段，上线时通过版本系统来控制更新)
+ * 打开html/css/js的语法检查提示
+ * 默认开启文件修改自动刷新浏览器机制
+ * 默认的构建后的文件放在系统默认的输出路径（通过fiss server open查看）
+ */
+
+//资源预处理
+//通用资源处理
 fis.match('src/(**)', {
-    release: '/static/$1'
+    release: '$1',
+    useHash: true,
 });
 
-fis.match('src/js/mod/**/*.js', {
+fis.match('{*.html,manifest.json}', {
+    useHash: false
+});
+
+//特殊路径下的资源处理
+fis.match('src/(test/**)', {
+    useHash: false
+});
+
+fis.match('scss/(*.scss)', {
+    parser: fis.plugin('node-sass-x'),
+    rExt: '.css',
+    release:'/css/$1'
+});
+
+fis.match('/src/test/server.conf', {
+    release: '/config/server.conf'
+});
+
+fis.match('src/js/(lib/**)', {
+    useHash: false
+});
+
+fis.match('src/fragment/**', {
+    release: false,
+});
+
+fis.match('js/(mod/**/*).js', {
     isMod: true,
+    moduleId: '$1'
 });
-fis.match('src/js/pkg/**/*.js', {
+
+fis.match('js/(pkg/*).js', {
     isMod: true,
+    moduleId: '$1'
 });
 
+//------------------------------------代码校验BEGIN----------------------------
 
-
-
+fis
+//html 校验
+    .match('*.html', {
+        lint: fis.plugin('html-hint', {
+            // HTMLHint Options
+            ignoreFiles: [],
+            rules: {
+                "tag-pair": true,
+                "doctype-first": true,
+                "spec-char-escape": true,
+                "id-unique": true,
+            }
+        })
+    })
+    // css 校验
+    .match('*.css', {
+        lint: fis.plugin('csslint', {
+            ignoreFiles: [],
+            rules: {
+                "known-properties": 2,
+                "empty-rules": 1,
+                "duplicate-properties": 2
+            }
+        })
+    })
+    //js 校验
+    .match('*.js', {
+        lint: fis.plugin('eslint', {
+            ignoreFiles: ['lib/**.js', 'fis-conf.js', 'test/**.js'],
+            rules: {
+                "no-unused-expressions": 1,
+                "no-unused-vars": 0,
+                "no-use-before-define": 2,
+                "no-undef": 2,
+            },
+            //envs:[],
+            globals: [ //这里配置你自己的全局变量
+                'define',
+                'require'
+            ]
+        })
+    });
+//------------------------------------代码校验END---------------------------
 // 使用符合AMD规范的requirejs
 // 配置详解：
 // baseUrl: 默认为. 即项目根目录,用来配置模块查找根目录
@@ -49,8 +138,8 @@ fis.match('src/js/pkg/**/*.js', {
 // packages: 用来配置包信息,方便项目中引用
 // shim: 可以达到不改目标文件,指定其依赖和暴露内容的效果,注意只对不满足amd的js有效
 fis.hook('amd', {
-    baseUrl: './src/js',
-    paths: {
+    baseUrl: 'src/js',
+   /* paths: {
 
     },
     packages: [
@@ -58,11 +147,8 @@ fis.hook('amd', {
     ],
     shim: {
 
-    }
-
+    }*/
 });
-
-
 
 // 利用fis的loader进行模块依赖加载
 fis.match('::package', {
@@ -73,21 +159,22 @@ fis.match('::package', {
                 fis.log.error('boot_config[' + page.id + '] is not set!');
                 return defaultConfigFile;
             }
-            return 'static/js/conf/' + configFile + '.js';
+            return '/js/conf/' + configFile + '.js';
         },
         // 内联 `require.config`
         inlineResourceConfig: false,
-        outputNotPackPathMap: false,
+        outputNotPackPathMap: true,
         page: {
             files: pageFiles,
             // 打包页面异步入口模块
-            packAsync: true,
+            packAsync: false,
             packCss: true,
 
         },
         amdConfig: {
-            //baseUrl:'/static/js/'
+            baseUrl:'/js/'
         },
+        trimUrlPre:'/js/',
         //是否需要把合成后的js文件输出到页面上，缺省是true
         outputMergeJsFile:false
     }),
@@ -100,31 +187,13 @@ fis.match('::package', {
     })*/
 });
 
-// 生产环境下的配置
-// js,css,png使用内置插件优化，加上md5戳
 
 
 fis.media('prod')
-    .match('*.{scss,css}', {
-        useSprite: true,
-        optimizer: fis.plugin('clean-css'),
-        domain: 'http://c.58cdn.com.cn'
-    })
-    .match('*.png', {
-        optimizer: fis.plugin('png-compressor')
-    })
-    .match('*.js', {
-        // fis-optimizer-uglify-js 插件进行压缩，已内置
-        optimizer: fis.plugin('uglify-js'),
-        domain: 'http://j2.58cdn.com.cn'
-    })
-    .match('lib/*.js', {
-        domain: 'http://j1.58cdn.com.cn'
-    })
-    //.match('*.{js,scss,png}', {
-    .match('*.{scss,png}', {
-        useHash: true
-    })
-    .match('::package', {
-        spriter: fis.plugin('csssprites')
-    })
+.set('release.packAsync',true)
+.set('release.outputNotPackPathMap',false);
+
+
+
+
+
