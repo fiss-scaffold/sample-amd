@@ -3,7 +3,7 @@
  * @author lenovo
  */
 
-define(['mod/foo/foo','mod/bar/bar'],function (foo,bar) {
+define(['../mod/foo/foo','../mod/bar/bar'],function (foo,bar) {
     // TODO
     
 });
