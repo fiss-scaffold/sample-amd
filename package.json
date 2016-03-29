@@ -17,7 +17,7 @@
     "fiss-lint-eslint": "^1.0.0",
     "fis3-packager-wn-pack": "git://github.com/winnieBear/fis3-packager-wn-pack.git",
     "fisx-helper":"*",
-    "fis3-hook-amd":"*"
+    "fiss-hook-amd":"*"
   },
   "author": "",
   "license": "ISC"

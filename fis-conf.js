@@ -13,6 +13,7 @@ fis.set('release', {
 fis.set('project.files', [
     'src/**',
 ]);
+fis.set('release.jsPkgDir','js');
 
 var pageFiles = ['index.html', 'page1.html'];
 var boot_config = {
@@ -174,7 +175,6 @@ fis.match('::package', {
         amdConfig: {
             baseUrl:'/js/'
         },
-        trimUrlPre:'/js/',
         //是否需要把合成后的js文件输出到页面上，缺省是true
         outputMergeJsFile:false
     }),
