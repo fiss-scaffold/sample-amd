@@ -16,9 +16,9 @@ fis.set('project.files', [
 fis.set('release.jsPkgDir','js');
 
 var pageFiles = ['index.html', 'page1.html'];
-var boot_config = {
-    'src/index.html': 'boot_index',
-    'src/page1.html': 'boot_page1'
+var page_config = {
+    'src/index.html': 'index',
+    'src/page1.html': 'page1'
 };
 
 
@@ -155,12 +155,12 @@ fis.hook('amd', {
 fis.match('::package', {
     packager: fis.plugin('wn-pack', {
         resourceConfigFile: function(defaultConfigFile, page) {
-            var configFile = boot_config[page.id];
+            var configFile = page_config[page.id];
             if (!configFile) {
-                fis.log.error('boot_config[' + page.id + '] is not set!');
+                fis.log.error('page_config[' + page.id + '] is not set!');
                 return defaultConfigFile;
             }
-            return '/js/conf/' + configFile + '.js';
+            return '/js/conf/boot_' + configFile + '.js';
         },
         // 内联 `require.config`
         inlineResourceConfig: false,
@@ -169,7 +169,16 @@ fis.match('::package', {
             files: pageFiles,
             // 打包页面异步入口模块
             packAsync: false,
-            packCss: true,
+            packCss: {
+                target:function(defaultPackFile, page){
+                    var configFile = page_config[page.id];
+                    if (!configFile) {
+                        fis.log.error('page_config[' + page.id + '] is not set!');
+                        return defaultConfigFile;
+                    }
+                    return '/css/' + configFile + '.css';
+                }
+            }
 
         },
         amdConfig: {
