@@ -154,38 +154,24 @@ fis.hook('amd', {
 // 利用fis的loader进行模块依赖加载
 fis.match('::package', {
     packager: fis.plugin('wn-pack', {
-        resourceConfigFile: function(defaultConfigFile, page) {
-            var configFile = page_config[page.id];
-            if (!configFile) {
-                fis.log.error('page_config[' + page.id + '] is not set!');
-                return defaultConfigFile;
-            }
-            return '/js/conf/boot_' + configFile + '.js';
-        },
-        // 内联 `require.config`
-        inlineResourceConfig: false,
-        outputNotPackPathMap: true,
         page: {
             files: pageFiles,
-            // 打包页面异步入口模块
+            // 打包页面异步请求的js配置
             packAsync: false,
-            packCss: {
-                target:function(defaultPackFile, page){
-                    var configFile = page_config[page.id];
-                    if (!configFile) {
-                        fis.log.error('page_config[' + page.id + '] is not set!');
-                        return defaultConfigFile;
-                    }
-                    return '/css/' + configFile + '.css';
-                }
-            }
-
+            //打包页面中外链的css的配置
+            packCss:false,
+            //打包页面中外链的css的配置
+            packJs:false,
         },
+        // 内联 `require.config`
+        inlineResourceConfig: true,
+        //最终生成的require.config的配置项
         amdConfig: {
             baseUrl:'/js/'
         },
-        //是否需要把合成后的js文件输出到页面上，缺省是true
-        outputMergeJsFile:false
+        outputNotPackPathMap: function(file){
+            return file.isJsLike && file.isMod;
+        }
     }),
     /*postpackager: fis.plugin('loader', {
         resourceType: 'amd',
@@ -199,8 +185,63 @@ fis.match('::package', {
 
 
 fis.media('prod')
-.set('release.packAsync',true)
-.set('release.outputNotPackPathMap',false);
+.match('::package', {
+    packager: fis.plugin('wn-pack', {
+        page: {
+            files: pageFiles,
+            // 打包页面异步请求的js配置
+            packAsync: true,
+            //打包页面中外链的css的配置
+            packCss: {
+                target:function(defaultPackFile, page){
+                    var configFile = page_config[page.id];
+                    if (!configFile) {
+                        fis.log.error('page_config[' + page.id + '] is not set!');
+                        return defaultConfigFile;
+                    }
+                    return '/css/pkg_'+configFile+'.css'
+                }
+            },
+            //打包页面中外链的css的配置
+            packJs:{
+                target:function(defaultPackFile, page){
+                    var configFile = page_config[page.id];
+                    if (!configFile) {
+                        fis.log.error('page_config[' + page.id + '] is not set!');
+                        return defaultConfigFile;
+                    }
+                    return '/js/pkg/pkg_'+configFile+'.js'
+                }
+            }
+        },
+        // 内联 `require.config`
+        inlineResourceConfig: false,
+        //最终生成的require.config的配置项
+        amdConfig: {
+            baseUrl:'/js/'
+        },
+        //最终生成的require.config文件的名字
+        resourceConfigFile: function(defaultConfigFile, page) {
+            var configFile = page_config[page.id];
+            if (!configFile) {
+                fis.log.error('page_config[' + page.id + '] is not set!');
+                return defaultConfigFile;
+            }
+            return '/js/conf/boot_' + configFile + '.js';
+        },
+        //没有打包的资源是否生成pathmap，在dev环境下需要生成，以方便按需加载调试
+        outputNotPackPathMap: false,
+        //是否需要把合成后的js文件输出到页面上，缺省是true
+        outputAsynPkg:true
+    }),
+    /*postpackager: fis.plugin('loader', {
+        resourceType: 'amd',
+        useInlineMap: true,
+        allInOne: {
+            includeAsyncs: true,
+        }
+    })*/
+});
 
 
 
