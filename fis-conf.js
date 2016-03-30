@@ -218,7 +218,7 @@ fis.media('prod')
         inlineResourceConfig: false,
         //最终生成的require.config的配置项
         amdConfig: {
-            baseUrl:'/js/'
+            baseUrl:'http://j2.58cdn.com.cn/js/'
         },
         //最终生成的require.config文件的名字
         resourceConfigFile: function(defaultConfigFile, page) {
@@ -231,8 +231,8 @@ fis.media('prod')
         },
         //没有打包的资源是否生成pathmap，在dev环境下需要生成，以方便按需加载调试
         outputNotPackPathMap: false,
-        //是否需要把合成后的js文件输出到页面上，缺省是true
-        outputAsynPkg:true
+        //是否需要把异步请求合成后的的js文件输出到页面上，缺省是false
+        outputAsynPkg:false
     }),
     /*postpackager: fis.plugin('loader', {
         resourceType: 'amd',
