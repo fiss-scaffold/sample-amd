@@ -15,7 +15,7 @@
     "fis-lint-html-hint": "^1.0.0",
     "fiss-lint-csslint": "^1.0.0",
     "fiss-lint-eslint": "^1.0.0",
-    "fis3-packager-wn-pack": "git://github.com/winnieBear/fis3-packager-wn-pack.git",
+    "fis3-packager-wn-pack": "*",
     "fisx-helper":"*",
     "fiss-hook-amd":"*"
   },

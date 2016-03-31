@@ -214,11 +214,23 @@ fis.media('prod')
                 }
             }
         },
+        bundles:[
+            {
+                files: ['/src/js/mod/base/base.js'],
+                target: '/js/pkg/common.js',
+                load:true
+            },{
+                files: ['/src/scss/reset.scss'],
+                target: '/css/pkg_common.css',
+                load:true
+            }
+        ],
         // 内联 `require.config`
         inlineResourceConfig: false,
         //最终生成的require.config的配置项
         amdConfig: {
-            baseUrl:'http://j2.58cdn.com.cn/js/'
+            //baseUrl:'http://j2.58cdn.com.cn/js/'
+            baseUrl:'/js/'
         },
         //最终生成的require.config文件的名字
         resourceConfigFile: function(defaultConfigFile, page) {
