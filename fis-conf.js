@@ -21,6 +21,7 @@ var page_config = {
     'src/page1.html': 'page1'
 };
 
+var urlPre = '/your/project/prepath/xxx'; // 项目路径前缀
 
 //package 设置
 fis.match('::package', {
@@ -151,7 +152,8 @@ fis.hook('amd', {
     }*/
 });
 
-// 利用fis的loader进行模块依赖加载
+// 利用wn-pack进行模块依赖加载
+// https://github.com/winnieBear/fis3-packager-wn-pack
 fis.match('::package', {
     packager: fis.plugin('wn-pack', {
         page: {
@@ -184,8 +186,12 @@ fis.match('::package', {
 
 
 
-fis.media('prod')
-.match('::package', {
+
+/**
+ *  test/preqa/qa/prod media在
+ *  package 阶段的配置对象
+ */
+var proPackageOptions = {
     packager: fis.plugin('wn-pack', {
         page: {
             files: pageFiles,
@@ -202,7 +208,7 @@ fis.media('prod')
                     return '/css/pkg_'+configFile+'.css'
                 }
             },
-            //打包页面中外链的css的配置
+            //打包页面中外链的js的配置
             packJs:{
                 target:function(defaultPackFile, page){
                     var configFile = page_config[page.id];
@@ -253,9 +259,202 @@ fis.media('prod')
             includeAsyncs: true,
         }
     })*/
-});
+}; // end proPackageOptions
 
 
+
+/**
+ * 自测(test)打包配置
+ * 对css/js/img进行合并，对已合并的资源不删除
+ * 默认的构建后的文件放在系统默认的输出路径（通过fiss server open查看）
+ */
+fis.media('test')
+    .match('*.{css,scss}', {
+        useSprite: true,
+    })
+    .match('::package', proPackageOptions);
+
+
+/**
+ * 预提测(pre-qa)打包配置，在本地能进行完整的测试，保留模拟配置，提测前最后的检查
+ * 对css/js/img进行合并，对已合并的资源进行删除，
+ * 默认的构建后的文件放在系统默认的输出路径（通过fiss server open查看）
+ */
+fis.media('pre-qa')
+    .match('*.{css,scss}', {
+        useSprite: true,
+    })
+    .match('::package', proPackageOptions)
+    .match('*', {
+        deploy: [
+            // 过滤掉已经被打包的资源.
+            fis.plugin('skip-packed', {
+                // 配置项
+            }),
+            //发布到output目录
+            fis.plugin('local-deliver', {
+                to: 'preview'
+            })
+        ]
+    });
+
+
+
+/**
+ * 提测(qa)打包配置，除了资源不压缩，其他跟prod一样
+ * 对css/js/img进行合并，对已合并的资源进行删除
+ * 所有资源的引用地址替换domain/url/hash
+ * 移除test下面的东西
+ * 所有资源发布到publish路径
+ * 所有资源不压缩
+ */
+fis.media('qa')
+    .match('{test/*,config/*}', {
+        release: false
+    })
+    .match('*.{css,scss}', {
+        useSprite: true,
+        domain: 'http://c.58cdn.com.cn' + urlPre
+    })
+    .match('*{.png,.jpg,.gif}', {
+        domain: 'http://j2.58cdn.com.cn' + urlPre
+    })
+    .match('*.js', {
+        domain: 'http://j1.58cdn.com.cn' + urlPre
+    })
+    .match('lib/*.js', {
+        useHash:false,
+        domain: 'http://j1.58cdn.com.cn' + urlPre
+    })
+    .match('::package', proPackageOptions)
+    .match('*', {
+        deploy: [
+            fis.plugin('skip-packed', {
+                // 配置项
+            }),
+            //发布到output目录
+            fis.plugin('local-deliver', {
+                to: 'publish'
+            })
+        ]
+    });
+
+
+
+/**
+ * 上线(prod)打包配置
+ * 对css/js/img进行合并，对已合并的资源进行删除
+ * 所有资源的引用地址替换domain/url/hash
+ * 移除test下面的东西
+ * 所有资源发布到publish路径
+ * 所有资源压缩
+ */
+fis.media('prod')
+    .match('{test/*,config/*}', {
+            release: false
+        })
+    .match('*.{css,scss}', {
+        useSprite: true,
+        optimizer: fis.plugin('clean-css'),
+        domain: 'http://c.58cdn.com.cn' + urlPre
+    })
+    .match('*{.png,.jpg,.gif}', {
+        domain: 'http://j2.58cdn.com.cn' + urlPre
+    })
+    .match('*.png', {
+        optimizer: fis.plugin('png-compressor'),
+    })
+    .match('*.js', {
+        // fis-optimizer-uglify-js 插件进行压缩，已内置
+        optimizer: fis.plugin('uglify-js'),
+        domain: 'http://j1.58cdn.com.cn' + urlPre
+    })
+    .match('lib/*.js', {
+        useHash:false,
+        domain: 'http://j1.58cdn.com.cn' + urlPre
+    })
+    .match('::package', proPackageOptions)
+    .match('*', {
+        deploy: [
+            fis.plugin('skip-packed', {
+                // 配置项
+            }),
+            //发布到output目录
+            fis.plugin('local-deliver', {
+                to: 'publish'
+            })
+        ]
+    });
+
+
+
+/**
+ * 上线(deploy-ftp)配置，并部署到ftp服务器
+ * 对css/js/img进行合并，对已合并的资源进行删除
+ * 所有资源的引用地址替换domain/url/hash
+ * 移除test下面的东西
+ * 所有资源压缩
+ * 所有资源发布到ftp
+ */
+fis.media('deploy-ftp')
+    .match('{test/*,config/*}', {
+        release: false
+    })
+    .match('*.{css,scss}', {
+        useSprite: true,
+        optimizer: fis.plugin('clean-css'),
+        domain: 'http://c.58cdn.com.cn' + urlPre
+    })
+    .match('*{.png,.jpg,.gif}', {
+        domain: 'http://j2.58cdn.com.cn' + urlPre
+    })
+    .match('*.png', {
+        optimizer: fis.plugin('png-compressor'),
+    })
+    .match('*.js', {
+        // fis-optimizer-uglify-js 插件进行压缩，已内置
+        optimizer: fis.plugin('uglify-js'),
+        domain: 'http://j1.58cdn.com.cn' + urlPre
+    })
+    .match('lib/*.js', {
+        useHash:false,
+        domain: 'http://j1.58cdn.com.cn' + urlPre
+    })
+    .match('::package', proPackageOptions)
+    /* .match('*.html', {
+         //需要自己安装fis-optimizer-html-minifier插件
+         optimizer: fis.plugin('html-minifier')
+     });*/
+    .match('*', {
+        deploy: [
+            fis.plugin('skip-packed', {
+                // 配置项
+                //ignore:[]
+            }),
+            fis.plugin('ftp-x', {
+                //'console':true,
+                remoteDir: '/static.58.com/remote/path/xxx/',
+                exclude: ['/img/'],
+                connect: {
+                    host: '192.168.119.5',
+                    port: '21',
+                    user: 'qatest',
+                    password: 'ftp@fe'
+                }
+            }),
+            fis.plugin('ftp-x', {
+                //'console':true,
+                remoteDir: '/pic2.58.com/remote/path/xxx/',
+                include: ['/img/'],
+                connect: {
+                    host: '192.168.*',
+                    port: '21',
+                    user: 'xxx',
+                    password: 'xxx'
+                }
+            })
+        ]
+    });
 
 
 
