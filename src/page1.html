@@ -12,10 +12,12 @@
     <link rel="stylesheet" type="text/css" href="scss/reset.scss">
 </head>
 <body>
-     fism page1!
-    <script src="js/lib/esl.js"></script>
+     <link rel="import" href="fragment/common-head.html?__inline">
+     fiss amd模块化开发模版测试页面:page1!
+    <script data-loader="true" src="js/lib/esl_zepto_load.min.js"></script>
     <script>
         require(['pkg/page1']);
     </script>
+    <link rel="import" href="fragment/common-foot.html?__inline">
 </body>
 </html>

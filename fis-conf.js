@@ -24,7 +24,9 @@ var page_config = {
     'src/page1.html': 'page1'
 };
 
-var urlPre = '/your/project/prepath/xxx'; // 项目路径前缀
+// 项目路径前缀 
+var urlPre = '/your/project/path'; 
+//js pkg 的baseUrl,例如
 var jsPkgBaseUrl = 'http://j2.58cdn.com.cn/xxx/js/';
 
 
@@ -104,7 +106,7 @@ fis
     .match('*.html', {
         lint: fis.plugin('html-hint', {
             // HTMLHint Options
-            ignoreFiles: [],
+            ignoreFiles: ['src/fragment/*'],
             rules: {
                 "tag-pair": true,
                 "doctype-first": true,
@@ -321,13 +323,12 @@ fis.media('pre-qa')
  * 所有资源不压缩
  */
 var _ = fis.util;
-var fis3_packager_wn_pack_options_qa = _.assign({},fis3_packager_wn_pack_options);
+var fis3_packager_wn_pack_options_qa = _.clone(fis3_packager_wn_pack_options,true);
 fis3_packager_wn_pack_options_qa['amdConfig']['baseUrl'] = jsPkgBaseUrl;
 
-console.info(fis3_packager_wn_pack_options_qa);
-
 fis.media('qa')
-    .match('{test/*,config/*}', {
+    .set('release.dir','publish')
+    .match('{test/*,config/*,manifest.json}', {
         release: false
     })
     .match('*.{css,scss}', {
@@ -370,7 +371,8 @@ fis.media('qa')
  * 所有资源压缩
  */
 fis.media('prod')
-    .match('{test/*,config/*}', {
+    .set('release.dir','publish')
+    .match('{test/*,config/*,manifest.json}', {
             release: false
         })
     .match('*.{css,scss}', {
@@ -419,7 +421,8 @@ fis.media('prod')
  * 所有资源发布到ftp
  */
 fis.media('deploy-ftp')
-    .match('{test/*,config/*}', {
+    .set('release.dir','publish')
+    .match('{test/*,config/*,manifest.json}', {
         release: false
     })
     .match('*.{css,scss}', {

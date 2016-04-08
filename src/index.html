@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="author" content="">
@@ -8,25 +9,53 @@
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0">
     <meta name="description" content="">
-    <title>aaa</title>
+    <title>fiss amd模块化开发模版</title>
     <link rel="stylesheet" type="text/css" href="scss/reset.scss">
     <link rel="stylesheet" type="text/css" href="scss/index.scss">
     <link rel="stylesheet" type="text/css" href="scss/foo.scss">
 </head>
-<body>
-    <link rel="import" href="fragment/common-head.html?__inline">
-    fism  index --!
 
-    <!--script type="text/javascript">
-        require(['common/base/base']);
-    </script-->
+<body>
+    <link rel="import" href="fragment/common-head.html?__inline"> fiss amd模块化开发模版测试页面:index.html!
     <p>aaaaaaaaaaaaaaaaaaaa</p>
-    <script src="js/lib/esl.js"></script>
+    
+
+    <!-- 模块化js的loader，譬如requirejs/esl/... -->
+    <script data-loader="true" src="js/lib/esl_zepto_load.min.js"></script>
+
+     <!-- 模块化js的loader，或者是线上的url-->
+    <!-- <script data-loader="true" src="http://j2.58cdn.com.cn/olympia/js/lib/esl_zepto_load.min.js"></script> --><!--ignore-->
 
     <script>
-       require(['pkg/main']);
+        require(['pkg/main']);
     </script>
+
+    <!-- 页面中引用的非模块化的本地js,不建议这种模块化和非模块化混合使用的写法，建议要么都是模块化，要么都是非模块化，第三方的js可以直接外链，最后不会被处理 -->
+    <script src="js/other/other-a.js"></script>
+    <script src="js/other/other-b.js"></script>
+    <script type="text/javascript">
+    console.log('some inline js 111 below,depend on other-a !');
+    console.log('some inline js 2222 below,,depend on other-b!');
+    </script>
+
+
+    <!-- 请不要这种方式写代码:先引入other-a.js,然后又插入一段依赖other-a的行内js，又引入other-b.js;这样合成后的js会放在other-b的位置，导致依赖other-a的行内js报错 -->
+    <!--
+    <script src="js/other/other-a.js"></script>
+    <script type="text/javascript">
+        console.log('some inline js 111 below,depend on other-a !')
+    </script>
+    <script src="js/other/other-b.js"></script>
+
+    <script type="text/javascript">
+        console.log('some inline js 2222 below,,depend on other-b!')
+    </script-->
+
+
+    <!-- 页面中引用的线上或第三方的js -->
     <script src="http://j1.58cdn.com.cn/test/t1.js"></script>
-    <script src="http://j1.58cdn.com.cn/test/t2.js"></script>
+
+    <link rel="import" href="fragment/common-foot.html?__inline">
 </body>
+
 </html>
