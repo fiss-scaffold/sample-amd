@@ -8,6 +8,20 @@
 body{
 	background-color:#fff;
 	h1{
-		color:black; 
+		color:black;
+		font-size: 2em;
 	}
+}
+
+.bird-1,
+.bird-2 {
+	width: 100px;
+	height: 100px;
+}
+
+.bird-1{
+    background-image: url('../img/bird-1.png?__sprite=bird');
+}
+.bird-2{
+    background-image: url('../img/bird-2.png?__sprite=bird');
 }
