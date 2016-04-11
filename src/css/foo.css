@@ -1,0 +1,17 @@
+/**
+ * @file foo.css
+ * @author lenovo
+ */
+
+ .rabbit-1,
+ .rabbit-2 {
+ 	width: 100px;
+ 	height: 100px;
+ }
+
+ .rabbit-1{
+     background-image: url('../img/rabbit-1.png?__sprite=rabbit');
+ }
+ .rabbit-2{
+     background-image: url('../img/rabbit-2.png?__sprite=rabbit');
+ }

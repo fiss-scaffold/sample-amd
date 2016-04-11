@@ -279,7 +279,7 @@ var fis3_packager_wn_pack_options = {
  * 默认的构建后的文件放在系统默认的输出路径（通过fiss server open查看）
  */
 fis.media('test')
-    .match('*.{css,scss}', {
+    .match('/css/**.{css,scss}', {
         useSprite: true,
     })
     .match('::package', {
@@ -293,7 +293,7 @@ fis.media('test')
  * 默认的构建后的文件放在系统默认的输出路径（通过fiss server open查看）
  */
 fis.media('pre-qa')
-    .match('*.{css,scss}', {
+    .match('/css/**.{css,scss}', {
         useSprite: true,
     })
     .match('::package', {
@@ -302,7 +302,7 @@ fis.media('pre-qa')
     .match('*', {
         deploy: [
             // 过滤掉已经被打包的资源.
-            fis.plugin('skip-packed', {
+            fis.plugin('skip-packed-x', {
                 // 配置项
             }),
             //发布到output目录
@@ -331,12 +331,12 @@ fis.media('qa')
     .match('{test/*,config/*,manifest.json}', {
         release: false
     })
-    .match('*.{css,scss}', {
+    .match('/css/**.{css,scss}', {
         useSprite: true,
         domain: 'http://c.58cdn.com.cn' + urlPre
     })
     .match('*{.png,.jpg,.gif}', {
-        domain: 'http://j2.58cdn.com.cn' + urlPre
+        domain: 'http://img.58cdn.com.cn' + urlPre
     })
     .match('*.js', {
         domain: 'http://j1.58cdn.com.cn' + urlPre
@@ -350,7 +350,7 @@ fis.media('qa')
     })
     .match('*', {
         deploy: [
-            fis.plugin('skip-packed', {
+            fis.plugin('skip-packed-x', {
                 // 配置项
             }),
             //发布到output目录
@@ -375,13 +375,13 @@ fis.media('prod')
     .match('{test/*,config/*,manifest.json}', {
             release: false
         })
-    .match('*.{css,scss}', {
+    .match('/css/**.{css,scss}', {
         useSprite: true,
         optimizer: fis.plugin('clean-css'),
         domain: 'http://c.58cdn.com.cn' + urlPre
     })
     .match('*{.png,.jpg,.gif}', {
-        domain: 'http://j2.58cdn.com.cn' + urlPre
+        domain: 'http://img.58cdn.com.cn' + urlPre
     })
     .match('*.png', {
         optimizer: fis.plugin('png-compressor'),
@@ -400,7 +400,7 @@ fis.media('prod')
     })
     .match('*', {
         deploy: [
-            fis.plugin('skip-packed', {
+            fis.plugin('skip-packed-x', {
                 // 配置项
             }),
             //发布到output目录
@@ -425,13 +425,13 @@ fis.media('deploy-ftp')
     .match('{test/*,config/*,manifest.json}', {
         release: false
     })
-    .match('*.{css,scss}', {
+    .match('/css/**.{css,scss}', {
         useSprite: true,
         optimizer: fis.plugin('clean-css'),
         domain: 'http://c.58cdn.com.cn' + urlPre
     })
     .match('*{.png,.jpg,.gif}', {
-        domain: 'http://j2.58cdn.com.cn' + urlPre
+        domain: 'http://img.58cdn.com.cn' + urlPre
     })
     .match('*.png', {
         optimizer: fis.plugin('png-compressor'),
@@ -454,7 +454,7 @@ fis.media('deploy-ftp')
      });*/
     .match('*', {
         deploy: [
-            fis.plugin('skip-packed', {
+            fis.plugin('skip-packed-x', {
                 // 配置项
                 //ignore:[]
             }),
