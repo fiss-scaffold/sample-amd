@@ -189,7 +189,7 @@ fis.match('::package', {
             baseUrl:'/js/'
         },
         //dev阶段也生成pathmap，为了按需加载到正确的文件，因为每一个模块文件也进行hash处理了，直接加载模块的名字，文件是不存在的
-        outputNotPackPathMap: function(file){
+        outputAsynModPathMap: function(file){
             return file.isJsLike && file.isMod;
         }
     })
