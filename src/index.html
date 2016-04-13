@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width">
     <meta name="author" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="pragma" content="no-cache">
@@ -11,17 +12,28 @@
     <meta name="description" content="">
     <title>fiss amd模块化开发模版</title>
     <link rel="stylesheet" type="text/css" href="scss/reset.scss">
+    <link rel="stylesheet" type="text/css" href="scss/common_header.scss">
+    <link rel="stylesheet" type="text/css" href="scss/common_footer.scss">
     <link rel="stylesheet" type="text/css" href="scss/index.scss">
     <link rel="stylesheet" type="text/css" href="css/foo.css">
 </head>
 
 <body>
-    <link rel="import" href="fragment/common-head.html?__inline"> fiss amd模块化开发模版测试页面:index.html!
-    <p>aaaaaaaaaaaaaaaaaaaa</p>
-    <div class="bird-1">bird-1</div>
-    <div class="bird-2">bird-2</div>
-
-
+    <link rel="import" href="fragment/common-head.html?__inline">
+    <h1>fiss amd模块化开发模版测试页面:index.html!</h1>
+    <p>O you know Angry Birds?</p>
+    <div>
+        <a href="#" class="bird-1">
+            <span class="icon"></span>
+            <span class="big">bird-1</span>
+        </a>
+    </div>
+    <div>
+        <a href="#" class="bird-2">
+            <span class="icon"></span>
+            <span class="big">bird-2</span>
+        </a>
+    </div>
     <!-- 模块化js的loader，譬如requirejs/esl/... -->
     <script data-loader="true" src="js/lib/esl_zepto_load.min.js"></script>
 
