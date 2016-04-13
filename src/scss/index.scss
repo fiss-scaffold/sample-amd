@@ -7,21 +7,45 @@
 /*index.scss begin*/
 body{
 	background-color:#fff;
+	font-size: 14px;
 	h1{
 		color:black;
-		font-size: 2em;
+		font-size: 1.5em;
 	}
+
+	p {
+		text-indent: 2em;
+		margin: 1em 0;
+	}
+}
+
+.big{
+	font-size:1.5em;
+	font-weight: 800;
 }
 
 .bird-1,
 .bird-2 {
-	width: 100px;
-	height: 100px;
+	display: inline-block;
+	margin: 20px;
+	span {
+		display:inline-block;
+	  	background-repeat: no-repeat;
+	}
+
+	.icon {
+		width: 26px;
+		height: 26px;
+	}
 }
 
-.bird-1{
+
+
+.bird-1 .icon{
+	// background-color: #00D3FF;
     background-image: url('../img/bird-1.png?__sprite=bird');
 }
-.bird-2{
+.bird-2 .icon{
+	// background-color: #7AFF00;
     background-image: url('../img/bird-2.png?__sprite=bird');
 }

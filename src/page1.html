@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width">
     <meta name="author" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="pragma" content="no-cache">
@@ -10,14 +11,27 @@
     <meta name="description" content="">
     <title>aaa</title>
     <link rel="stylesheet" type="text/css" href="scss/reset.scss">
-    <link rel="stylesheet" type="text/css" href="scss/foo.scss">
+    <link rel="stylesheet" type="text/css" href="scss/common_header.scss">
+    <link rel="stylesheet" type="text/css" href="scss/common_footer.scss">
+    <link rel="stylesheet" type="text/css" href="scss/page1.scss">
 </head>
 <body>
-     <link rel="import" href="fragment/common-head.html?__inline">
-     fiss amd模块化开发模版测试页面:page1!
-    <div class="rabbit-1">rabbit-1</div>
-    <div class="rabbit-2">rabbit-2</div>
+    <link rel="import" href="fragment/common-head.html?__inline">
+    <h1>fiss amd模块化开发模版测试页面:page1!</h1>
+    <p>Do you know Skeeter Rabbit?</p>
+    <div>
+        <a href="#" class="rabbit-1">
+            <span class="icon"></span>
+            <span class="big">rabbit-1</span>
+        </a>
+    </div>
 
+    <div>
+        <a href="#" class="rabbit-2">
+            <span class="icon"></span>
+            <span class="big">rabbit-2</span>
+        </a>
+    </div>
     <script data-loader="true" src="js/lib/esl_zepto_load.min.js"></script>
     <script>
         require(['pkg/page1']);
