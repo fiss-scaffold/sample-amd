@@ -265,7 +265,7 @@ var fis3_packager_wn_pack_options = {
         return '/js/conf/boot_' + configFile + '.js';
     },
     //在非dev环节，没有被打包的资源在boot文件中不生成pathmap
-    outputNotPackPathMap: false,
+    outputAsynModPathMap: false,
     //异步请求js文件打包后不通过外链的方式输出到页面上，而是让它异步自动加载
     outputAsynPkg:false
 };
