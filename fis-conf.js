@@ -293,6 +293,13 @@ fis.media('test')
  * 默认的构建后的文件放在系统默认的输出路径（通过fiss server open查看）
  */
 fis.media('pre-qa')
+    .set('release', {
+        'watch': false,
+        'live': false,
+        'lint': true,
+        'clean': true,
+        'clear': true
+    })
     .match('/css/**.{css,scss}', {
         useSprite: true,
     })
@@ -327,6 +334,14 @@ var fis3_packager_wn_pack_options_qa = _.clone(fis3_packager_wn_pack_options,tru
 fis3_packager_wn_pack_options_qa['amdConfig']['baseUrl'] = jsPkgBaseUrl;
 
 fis.media('qa')
+    .set('release', {
+        'dir':'publish',
+        'watch': false,
+        'live': false,
+        'lint': true,
+        'clean': true,
+        'clear': true
+    })
     .set('release.dir','publish')
     .match('{test/*,config/*,manifest.json}', {
         release: false
@@ -371,7 +386,14 @@ fis.media('qa')
  * 所有资源压缩
  */
 fis.media('prod')
-    .set('release.dir','publish')
+     .set('release', {
+        'dir':'publish',
+        'watch': false,
+        'live': false,
+        'lint': true,
+        'clean': true,
+        'clear': true
+    })
     .match('{test/*,config/*,manifest.json}', {
             release: false
         })
@@ -421,7 +443,14 @@ fis.media('prod')
  * 所有资源发布到ftp
  */
 fis.media('deploy-ftp')
-    .set('release.dir','publish')
+     .set('release', {
+        'dir':'publish',
+        'watch': false,
+        'live': false,
+        'lint': true,
+        'clean': true,
+        'clear': true
+    })
     .match('{test/*,config/*,manifest.json}', {
         release: false
     })
