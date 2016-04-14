@@ -24,8 +24,8 @@ var page_config = {
     'src/page1.html': 'page1'
 };
 
-// 项目路径前缀 
-var urlPre = '/your/project/path'; 
+// 项目路径前缀
+var urlPre = '/your/project/path';
 //js pkg 的baseUrl,例如
 var jsPkgBaseUrl = 'http://j2.58cdn.com.cn/xxx/js/';
 
@@ -137,7 +137,7 @@ fis
                 "no-undef": 2,
             },
             //envs:[],
-            globals: [ 
+            globals: [
                 //这里配置你自己的全局变量
                 'define',
                 'require'
@@ -193,7 +193,7 @@ fis.match('::package', {
             return file.isJsLike && file.isMod;
         }
     })
-   
+
 });
 
 
@@ -201,7 +201,7 @@ fis.match('::package', {
 
 /**
  *  test/preqa/qa/prod media在 package 阶段的配置对象
- *  
+ *
  * 利用fis3-packager-wn-pack进行css/amd模块的js/外链的js的构建，
  * 每一个页面会生成一个boot文件，文件是该页面的require.config配置
  * 同时每一个页面会生成一个或多个pkg文件
@@ -492,10 +492,10 @@ fis.media('deploy-ftp')
                 remoteDir: '/static.58.com/remote/path/xxx/',
                 exclude: ['/img/'],
                 connect: {
-                    host: '192.168.119.5',
+                    host: '192.168.*',
                     port: '21',
-                    user: 'qatest',
-                    password: 'ftp@fe'
+                    user: 'xxx',
+                    password: 'xxx'
                 }
             }),
             fis.plugin('ftp-x', {

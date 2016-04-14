@@ -12,9 +12,6 @@
     "fis-spriter-csssprites-plus":"*",
     "fis3-deploy-skip-packed-x":"0.0.6",
     "fis3-deploy-ftp-x":"*",
-    "fis-lint-html-hint": "^1.0.0",
-    "fiss-lint-csslint": "^1.0.0",
-    "fiss-lint-eslint": "^1.0.0",
     "fis3-packager-wn-pack": "*",
     "fisx-helper":"*",
     "fiss-hook-amd":"*"
